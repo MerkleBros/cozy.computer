@@ -1,0 +1,20 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+#contact-navigation, a {
+  color: #ff00d7;
+}
+
+#cozy-computer {
+  border-bottom: 1px solid pink;
+}
+
+.footer {
+  border-top: 1px solid pink;
+}
+
+.markdown-body h2 {
+  border: none;
+}

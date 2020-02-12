@@ -1,0 +1,12 @@
+title: Cozy Computer
+author: Patrick McCarver
+email: patrick@cozy.computer
+description: >-
+  Be cozy and learn things with me (Patrick McCarver)
+baseurl: ""
+url: "https://cozy.computer"
+twitter_username: cozy_computer
+github_username: Merklebros
+permalink: /:title
+plugins:
+  - jekyll-feed
