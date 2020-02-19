@@ -13,7 +13,7 @@ This is my first post! It seems fitting that my first post should be about how t
 
 #### Choosing a static website generator
 ##### Notes on static websites
-Jekyll is a simple tool for building a `static website`>.
+Jekyll is a simple tool for building a `static website`.
 
 A `static website` is one that is delivered to your browser exactly as it is stored. When you visit a static web page, you will always receive the same page no matter who you are and no matter where you've come from.
 
