@@ -9,7 +9,7 @@ I've recently become inspired by [Byte Magazine's](https://en.wikipedia.org/wiki
 
 The cover pieces, largely by artist [Robert Tinney](https://en.wikipedia.org/wiki/Robert_Tinney), are full of wonderful visual metaphors for abstract computing concepts. [In an email interview](http://www.vintagecomputing.com/index.php/archives/169/vcg-interview-robert-tinney-microcomputer-illustration-pioneer) Tinney explained that his non-technical background helped him to see technical concepts in unique ways.
 
-I wanted my own copies of these covers and [found a collection of the covers grouped by year as PDFs](http://www.vintagefreeware.com/bytecvrs.htm). But I wanted each cover as a separate `.png`.
+I wanted my own copies of these covers and [found a collection of the covers grouped by year as PDFs](http://www.vintagefreeware.com/bytecvrs.htm). The `pdf` files [had twelve pages each](http://www.vintagefreeware.com/1978.pdf) - for the twelve monthly issues in a year - but I wanted each month's cover as a separate `.png`.
 
 #### Converting Image Formats on Linux
 I can see from [Fuzzy finding](https://github.com/junegunn/fzf/wiki/examples#man-pages) the manual pages that there are many tools for operating on PDF files:
@@ -29,7 +29,7 @@ There's a set of tools that comes with Ubuntu that all begin with `pdf*` and acc
 
 I'd never heard of these strange file formats. `PPM`, `PGM`, and `PBM` all belong to family of image files defined in the [Netpbm](https://en.wikipedia.org/wiki/Netpbm) library. They are designed to be "easily exchanged between platforms" and originally invented to send bitmaps through email messages.
 
-Although the `pdftoppm` descriptions doesn't include `.png` or `.jpeg`, it has flags for both.
+Although the `pdftoppm` descriptions doesn't include `.png` or `.jpeg`, it has flags for both. And it saves each page of a `pdf` as a `.png`!
 
 #### Retrieving and processing the PDF files
 The PDF files are conveniently located in the incrementable format
