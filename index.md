@@ -14,5 +14,13 @@ Look upon my works ye mighty, and drink tea
 
 ## Blog
 {% for post in site.posts %}
-[{{post.title}}]({{post.url}})
+  {% assign read_time =
+    post.content |
+    number_of_words |
+    divided_by: site.average_reading_speed_words_per_minute |
+    plus: 1 |
+    round
+  %}
+  {:.post-word-count}
+  [{{post.title}}]({{post.url}}) ({{read_time}} minutes)
 {% endfor %}
