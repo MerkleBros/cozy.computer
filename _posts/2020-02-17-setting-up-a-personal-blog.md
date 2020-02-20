@@ -11,8 +11,8 @@ This is my first post! It seems fitting that my first post should be about how t
 - [Github Pages](https://pages.github.com/) - host a website via a Github repository
 - custom domain name and some CNAME and A records
 
-#### Choosing a static website generator
-##### Notes on static websites
+## Choosing a static website generator
+### Notes on static websites
 Jekyll is a simple tool for building a `static website`.
 
 A `static website` is one that is delivered to your browser exactly as it is stored. When you visit a static web page, you will always receive the same page no matter who you are and no matter where you've come from.
@@ -27,7 +27,7 @@ Although they're old fashioned, [static website generators are still hugely popu
 
 One reason for this is `cache invalidation` - knowing when cached content needs to be refreshed. Because of the large number of dynamic elements in a modern web page, it can be difficult to determine if its content needs to be updated or not. Caches of web pages are used to save network traffic and delivery time: cached pages can be saved in the browser or delivered via a `Content Delivery Network (CDN)` - a network of cache servers where the nearest server can quickly deliver you cached content. `Static websites` have a simpler caching protocol - if the file has been updated, update the cache.
 
-##### Principles of static website generators
+### Principles of static website generators
 Static website generators typically:
 - Allow pages to be written in `markdown`, `text`, or `HTML` files.
 - Allow pages to be written as `templates`, where content can be programmatically inserted into a page when it is generated using a `templating language`. For instance, a post template might have the post title, date, and content programmatically inserted from the markdown file for that post.
@@ -35,7 +35,7 @@ Static website generators typically:
 
 Static website generators build all `template` content into a set of static resources (HTML, Javascript, CSS, assets like images and video, etc). These static resources can then be hosted and served on the internet.
 
-##### Choices of static website generators
+### Choices of static website generators
 [Jekyll](https://jekyllrb.com/) is probably the most popular static website generator. It uses a templating language called [Liquid](https://shopify.github.io/liquid/), supports content written in `markdown`, and supports Sass CSS preprocessing. It ships with a local development server with hot reloading. Jekyll is used in the background when you host static websites on Github Pages. Some complain that Jekyll is slow to build for larger websites.
 
 [Hugo](https://gohugo.io/) bills itself as the "fastest framework", meaning it can build much faster than Jekyll. It uses a templating engine based on Go. Hugo also supports content written in `markdown` and has a local development server.
@@ -44,7 +44,7 @@ Static website generators build all `template` content into a set of static reso
 
 I've chosen Jekyll because of recommendations from friends at the [Recurse Center](https://www.recurse.com/), because I am only interested in writing simple markdown posts, and because I intend to host on Github Pages which is already set up to work with Jekyll.
 
-#### Hosting a static website
+## Hosting a static website
 Static websites are just a collection of files and there are many ways to host them. I've chosen Github Pages.
 
 [Github Pages](https://pages.github.com/) lets you host one personal website and unlimited project websites directly from a Github repository for free. It has built-in support for Jekyll and simple setup for HTTPS and custom domain names. I've chosen it for these reasons and because I already planned to keep my blog on Github for version control.
@@ -55,7 +55,7 @@ Some other free options (depending on usage tiers):
 - [Amazon S3](https://aws.amazon.com/s3/) offers hosting static websites that can integrate with most AWS services, high uptime, unlimited scaling.
 - A Dropbox or Google Drive folder with a public link.
 
-#### Setting up Github pages and using a custom domain name
+## Setting up Github pages and using a custom domain name
 Github Pages allows you to serve the contents of your Github repository as a website.
 
 By default visitors can access your personal website at `your_username.github.io` or `your_organization_name.github.io` and your project websites at `your_username.github.io/project_repository_name`. You can also set up a custom domain name if you have one or want to purchase one.
@@ -68,14 +68,14 @@ Steps to setting up Github Pages for a personal website:
 
 You should now be able to visit your static website at `your_username.github.io` but not yet at your custom domain.
 
-##### Notes on A and CNAME records for domains
+### Notes on A and CNAME records for domains
 Entering the custom domain name above will create a `CNAME` file in your repository. `CNAME` records - Canonical Name records - are used to provide aliases to domain names. They allow you to say, for instance, that `www.cozy.computer` and `cozy.computer` are the same website.
 
 `A` records map domain names to IP addresses. They're how you get from a domain (ex `cozy.computer`) to the actual machine hosting the static website.
 
 In my `CNAME` file is `cozy.computer`. This tells visitors to `merklebros.github.io` (my default personal website) and visitors to `www.cozy.computer` to look for `cozy.computer` when using `A` records to look up the IP address where my website is hosted.
 
-##### Setting A and CNAME records at the DNS provider
+### Setting A and CNAME records at the DNS provider
 When you purchase a domain name, the `A` records are set to point to the DNS provider's (or affiliate's) IP addresses. Visitors to your domain might be served an advertisement for the DNS provider or a 404 page.
 
 You can update the `A` records to point to Github's servers so that Github Pages can serve your static website instead. Most providers will have a guide for how to do this.
@@ -95,7 +95,7 @@ To redirect the `www` subdomain (ex `www.example.com`), add a `CNAME` record at 
 
 When the changes have propagated (maybe up to 24 hours but typically under 1 hour) you can visit your static website at your custom domain.
 
-#### Setting up Jekyll for local development
+## Setting up Jekyll for local development
 To develop your static website locally using Jekyll first install the following dependencies:
 - `Ruby >= 2.4.0`, the Ruby programming language
 - `RubyGems`, the Ruby package manager
@@ -112,7 +112,7 @@ Clone your repository from Github and `cd` into it. Remove any files except for 
 
 where `jekyll new` sets up a new Jekyll project, `.` in the current directory, `--force` even if the path already exists (and the current directory does already exist). Start a development server with hot reload activated with `bundle exec jekyll serve -l` then open [http://localhost:4000](http://localhost:4000).
 
-#### Building the website and directory structure
+## Building the website and directory structure
 
 The default files created by `jekyll new` are:
 
@@ -129,7 +129,7 @@ Jekyll project directory
 - _site/
 ```
 
-##### _config.yml
+### _config.yml
 `_config.yml` is a `YAML (recursive acronym for YAML A'int Markdown Lanaguage)` file for configuring Jekyll. You can fill in the details for your website's title, email, description (the text that will show up in a Google search), url. You can specify any `key: value` pair here and you will be able to access it in the other files for your website.
 
 My slightly modified `_config.yml` is below, I've removed `theme: minima` because I like the Github Pages default theme, `Primer`. I've added a custom `key: value` pair, `average_reading_speed_words_per_minute: 250` so that I can show a read time on my posts later.
@@ -154,7 +154,7 @@ Jekyll allows you to specify the path for your posts and pages with the [permali
 
 Jekyll has many [plugins](https://jekyllrb.com/docs/plugins/). The default plugin [jekll-feed](https://github.com/jekyll/jekyll-feed) will create an Atom RSS feed at `/feed.xml`.
 
-##### Gemfile and Gemfile.lock
+### Gemfile and Gemfile.lock
 A `Gemfile` is a file describing dependencies for Ruby programs. These are used with `Bundler`, a dependency management program for Ruby projects that uses the `Gemfile` to install Ruby gems and `pin` them to specific versions with `Gemfile.lock`. `Gemfile` is analogous to Python `requirements.txt` or NodeJS `package.json` and `package-lock.json`.
 
 When hosting on Github Pages, you can run into dependency issues because Github Pages rebuilds your website using their version of Jekyll before deploying it. This can lead to unexpected behavior. For instance, different versions of Ruby parse `YAML` files differently. To ensure that the deployed website behaves the same as the local development build, use the [github-pages gem](https://github.com/github/pages-gem) which sets up local dependencies that match Github Pages as closely as possible.
@@ -181,10 +181,10 @@ gem "wdm", "~> 0.1.1", :install_if => Gem.win_platform?
 
 Run `bundle install` to install the dependencies specific to the `github-pages` gem.
 
-##### .gitignore
+### .gitignore
 A `.gitignore` is generated by `jekyll new`. It tells Git to ignore files related to the Jekyll build process: `_site, .sass-cache, .jekyll-cache, .jekyll-metadata, vendor`.
 
-##### Front Matter and index.md
+### Front Matter and index.md
 Jekyll generates two `.markdown` files that can be safely renamed to `.md` instead.
 
 Markdown files are the content for your website. You can write post and page content using Markdown and then include them into HTML layouts.
@@ -213,7 +213,7 @@ Look upon my works ye mighty, and drink tea
 
 We can see that in Markdown you can link to other Markdown files, and you can use the `Liquid` templating language to insert content. The last three lines take every post (accessible under `site.posts`) and make a link for each post.
 
-##### Layouts and includes
+### Layouts and includes
 Jekyll supports custom layouts and looks for them in the `_layouts` folder. Create this folder and create `default.html` there. Jekyll will use a `default` layout for `index.md` without having to specify it in the Front Matter. I'm using a slightly modified `default.html` from the Primer theme available from [their Github repo](https://github.com/pages-themes/primer/blob/master/_layouts/default.html).
 
 ```html
@@ -328,10 +328,10 @@ layout: default
 
 I want posts to look the same as the home page but with different content, so I use the `default` layout. I'll display the page's `title`, word count, read time, and content. Liquid template language uses `|` to pass variables to Liquid internal functions, like in `Bash`. In `{% assign word_count = content | number_of_words %}`, content is passed to `number_of_words`, an internal liquid function for calculating number of words. Below that I do my own math to display the reading time. Like before, `content` is the content of the Markdown file we pass to this template.
 
-##### 404.html
+### 404.html
 There's a 404 page you can customize but I just leave it alone.
 
-##### Posts
+### Posts
 Jekyll looks for posts in `_posts` and drafts in `_drafts`. Posts are markdown files that must be named with the date leading: `YYYY-MM-DD-title-of-post.md`.
 
 You can include Front Matter `YAML` at the beginning of the post to use in your templates. Jekyll supports assigning `categories` and `tags` to pages and posts. `Categories` are meant to be separate sections of the website and get their own url string with the category name in it: `your_domain.xyz/category/blah`. `Tags` are used internally so that you can find all pages or posts with that tag. Below is the Front Matter for this post:
@@ -346,7 +346,7 @@ date:   2020-02-17
 
 The rest of the post goes below the Front Matter and will be inserted as `content` into the post template.
 
-#### Deploying
+## Deploying
 Jekyll builds your static website locally in `_site/`. Depending on your deployment you may or may not need the built website.
 
 - If you deploy to Github Pages, it will rebuild your website for you, so you don't need to push `_site/` to your repository.
