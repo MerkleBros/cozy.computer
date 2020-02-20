@@ -11,7 +11,7 @@ The cover pieces, largely by artist [Robert Tinney](https://en.wikipedia.org/wik
 
 I wanted my own copies of these covers and [found a collection of the covers grouped by year as PDFs](http://www.vintagefreeware.com/bytecvrs.htm). The `pdf` files [had twelve pages each](http://www.vintagefreeware.com/1978.pdf) - for the twelve monthly issues in a year - but I wanted each month's cover as a separate `.png`.
 
-#### Converting Image Formats on Linux
+## Converting Image Formats on Linux
 I can see from [Fuzzy finding](https://github.com/junegunn/fzf/wiki/examples#man-pages) the manual pages that there are many tools for operating on PDF files:
 
 ![curling-byte-magazine-covers-0.png](assets/curling-byte-magazine-covers-0.png)
@@ -20,7 +20,7 @@ I can see from [Fuzzy finding](https://github.com/junegunn/fzf/wiki/examples#man
 
 `Cairo` is another popular tool that provides `pdftocairo` for converting a pdf viewable in Gnome's `Popler` pdf viewer to various image formats. I've used `Cairo` before so wanted to try something else.
 
-#### pdftoppm
+## pdftoppm
 There's a set of tools that comes with Ubuntu that all begin with `pdf*` and according to the manual are mysteriously developed by `Glyph & Cog, LLC (copyright 1996-2011)`.
 - `pdfinfo` extracts metadata from pdf files (title, subject, keywods, author, creation date, etc)
 - `pdftotext` extracts text from a pdf
@@ -31,7 +31,7 @@ I'd never heard of these strange file formats. `PPM`, `PGM`, and `PBM` all belon
 
 Although the `pdftoppm` descriptions doesn't include `.png` or `.jpeg`, it has flags for both. And it saves each page of a `pdf` as a `.png`!
 
-#### Retrieving and processing the PDF files
+## Retrieving and processing the PDF files
 The PDF files are conveniently located in the incrementable format
 
 `http://www.vintagefreeware.com/YEAR_NUMBER.pdf`
