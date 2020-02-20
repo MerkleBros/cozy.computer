@@ -18,7 +18,9 @@
 
 .post-word-count {
   color: darkgrey;
-  font-size: 70%;
+  a {
+    font-size: 1.1em;
+  }
 }
 
 .footer {
