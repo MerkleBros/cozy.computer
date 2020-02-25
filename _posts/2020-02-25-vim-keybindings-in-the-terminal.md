@@ -4,19 +4,17 @@ title:  "Vim keybindings in the terminal"
 date:   2020-02-25
 ---
 
-## Setting vi or emacs mode in Bash
-You can edit and navigate the Bash command line using simplified `vi` or `emacs` keybindings.
+You can navigate the Bash command line using simplified `vi` or `emacs` keybindings.
 
-In your `.bashrc`, use `set -o vi` for `vim-like` or `set -o emacs` for `emacs-like` navigation where the `-o` flag is for `options`.
+Use `set -o vi` for `vim-like` or `set -o emacs` for `emacs-like` navigation where the `-o` flag is for `options`.
 
 ## Default keybindings for vi
-### Insert mode
-New command lines will start in insert mode which behaves similarly to the regular terminal (but is annoying for vim users).
+The command line will start in `insert mode` which is similar to the default terminal behavior.
 
 ### Normal mode
-Use `escape` to return to normal mode (I've remapped this to `jk`, see below).
+Use `escape` to return to `normal mode` (I've remapped this to `jk`, see below).
 
-In normal mode, you can navigate using familiar keybindings:
+In `normal mode`, you can navigate using familiar keybindings:
 
 - `l` move forward a letter
 - `h` move back a letter
@@ -33,6 +31,7 @@ In normal mode, you can navigate using familiar keybindings:
 - `dd` delete line
 - `d movement` delete to movement
 - `yy` yank line
+- `y movement` yank to movement
 - `p` paste yanked text
 
 Note that yanking and pasting in Bash doesn't use the system clipboard.
@@ -113,6 +112,6 @@ bind '"zj":accept-line'
 ## Vi keybindings in other Bash-like programs
 Thanks to [Arabesque](https://sanctum.geek.nz/arabesque/vi-mode-in-bash/), I discovered that many programs use `readline` to get lines from a user using a terminal prompt. You can use `vi-like` keybindings in programs that use `readline` besides Bash.
 
-Create a `.inputrc` file in your home directory and inside put `set editing-mode vi`.
+Create an `.inputrc` file - a configuration file for `readline` - in your home directory and inside put `set editing-mode vi`.
 
-Restart your computer and you can use vi-keybindings in other programs like `MYSQL` and `Python3`.
+Restart your computer and you can use vi-keybindings in other programs like the REPLs for `node` and `python3`. Each program has varying support however - `python3` works fine but `node` has trouble exiting insert mode.
