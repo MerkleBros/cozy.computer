@@ -6,7 +6,7 @@ Date: 2020-02-26
 ## Speculative fiction deep dive
 [Speculative fiction](https://en.wikipedia.org/wiki/Speculative_fiction) is an umbrella genre of fiction covering science fiction, fantasy, horror, dystopian, [weird](https://en.wikipedia.org/wiki/Weird_fiction), and other types of fiction.
 
-Last year I began devouring speculative fiction short stories with the eventual goal of writing and publishing short stories in this genre. Since August 2019, I've read and analyzed over 650,000 words of speculative fiction spread over 130 short stories, many of them award winning stories represented in the [Hugo Awards](https://en.wikipedia.org/wiki/Hugo_Award_for_Best_Short_Story), [Nebula Awards](https://en.wikipedia.org/wiki/Nebula_Award_for_Best_Short_Story), [British Fantasy Awards](https://en.wikipedia.org/wiki/British_Fantasy_Award), and [World Fantasy Awards](https://en.wikipedia.org/wiki/World_Fantasy_Award%E2%80%94Short_Fiction).
+Last year I began devouring speculative fiction short stories with the eventual goal of writing and publishing short stories in this genre. Since August 2019, I've read and analyzed over 650,000 words of speculative fiction spread over 130 short stories, many of them award winning stories represented in the [Hugo Awards](https://en.wikipedia.org/wiki/Hugo_Award_for_Best_Short_Story), [Nebula Awards](https://en.wikipedia.org/wiki/Nebula_Award_for_Best_Short_Story), [British Fantasy Awards](https://en.wikipedia.org/wiki/British_Fantasy_Award), [Bram Stoker Award](https://en.wikipedia.org/wiki/Bram_Stoker_Award_for_Short_Fiction), and [World Fantasy Awards](https://en.wikipedia.org/wiki/World_Fantasy_Award%E2%80%94Short_Fiction).
 
 ## Toward a science fiction database
 I wanted to build a database of speculative fiction stories - including story texts - for my own personal use. This corpus would eventually help to answer questions like:
@@ -40,7 +40,7 @@ These magazines include:
 Many of these magazines are freely available on the internet. But copying and pasting them manually takes a long time and is error prone.
 
 ## Web scraping using Python and Beautiful Soup 4
-`Web scraping` - programmatically gathering content from websites - is one way to build a large, diverse corpus from various sources on the internet.
+`Web scraping` - programmatically gathering content from websites - is one way to build a large corpus from various sources on the internet.
 
 To start building this corpus I decided to scrape one of my favorite speculative fiction magazines: [Lightspeed Magazine](http://www.lightspeedmagazine.com/).
 
@@ -53,9 +53,9 @@ It uses a `parser` - a program that takes a source document (typically text) and
 
 A typical workflow for using `Beautiful Soup` is:
 - GET the source pages as HTML using an HTTP library
-- Construct a parse tree object using `BS4` and your parser of choice to parse the requested HTML
-- Use `BS4` to find content in the parse tree object
-- Save the content for later (we'll use a Python `pickle` file)
+- Construct a parse tree object using `Beautiful Soup` and your parser of choice to parse the requested HTML
+- Use `Beautiful Soup` to find content in the parse tree object
+- Save the content for later (we'll use a [Python pickle file](https://docs.python.org/3/library/pickle.html))
 
 ### Project setup
 Make a new directory and track it with git:
@@ -95,7 +95,7 @@ beautifulsoup4
 
 I like [pylint](TODO: link to pylint) because it will gently remind me when my code is not following common programming patterns and it will format my code in a standard way. Pylint is technically a `developer requirement` and the normal pattern is to save those in `dev-requirements.in` but I didn't do that here.
 
-Running `pip-compile` will place requirements into a `requirements.txt` with all dependencies `pinned`. This file has all of your dependencies `pinned` and tells which dependencies required the other dependencies. My `requirements.txt`:
+Running `pip-compile` will place requirements into a `requirements.txt` with all dependencies `pinned`. This file has all of your dependencies `pinned` to a specific version and tells which dependencies required the other dependencies. My `requirements.txt`:
 
 ```
 #
@@ -162,7 +162,7 @@ def request_soup_page(url: str):
 Here `requests.get(url)` performs an HTTP `GET` request for the HTML at the given `url`. If the page was found, use `Beautiful Soup` to parse the page into an object (`soup`) and return that object.
 
 ## Collecting links to all issues of the magazine
-The magazine [lists all issues](TODO: Link to magazine issue pages) as a `paginated list` - a list separated over several pages. We will need to `GET` all pages of this list and then use `Beautiful Soup` to find the link to each issue on each page.
+The magazine [lists all issues](http://www.lightspeedmagazine.com/category/issues/) as a `paginated list` - a list separated over several pages. We will need to `GET` all pages of this list and then use `Beautiful Soup` to find the link to each issue on each page.
 
 We can construct URLs for the paginated list pages: `http://www.lightspeedmagazine.com/category/issues/page/NUMBER`.
 
@@ -201,13 +201,13 @@ def request_all_paginated_list_pages(base_url: str) -> list:
     return pages
 ```
 
-Note that `time.sleep(5)` waits for five seconds between requests. It's important to be mindful of server loads when scraping - waiting is polite.
+Note that `time.sleep(5)` waits for five seconds between requests. It's important to be mindful of server loads when scraping - we don't want to DDOS our favorite magazines.
 
 Now we have a list of `soup` objects representing the paginated list of issues with links to every issue.
 
 ### Using Beautiful Soup 4 to find links to every issue of the magazine
 
-`Beautiful Soup` uses a set of querying methods that return a `soup` object. This means you can chain them together to find HTML elements deep in the `parse tree`.
+`Beautiful Soup` uses a set of querying methods that return a `soup` object. This means you can chain queries together to find HTML elements deep in the `parse tree`.
 
 In `find_all_issue_links`, we will iterate through each of the soup objects we collected using `request_all_paginated_list_pages()`. We'll use several methods on the `soup` object that all return another `soup` object:
 
@@ -215,9 +215,9 @@ In `find_all_issue_links`, we will iterate through each of the soup objects we c
 - `find` to find a specific HTML element
 - `find_all` to find all elements matching some condition
 
-These methods let us find links for every issue of the magazine. Then we can access the `href` property for every links to get a URL. We return a list of these URLs.
+These methods let us find links (an `a` HTML element) for every issue of the magazine. Then we can access the `href` property for every link to get a URL string. We return a list of these URLs.
 
-Finding out where to look for the URLs was a manual process of inspecting with the Chrome developer tools.
+Finding out where to look for the URLs was a manual process of inspecting with the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools).
 
 ```python
 def find_all_issue_links(issues_pages: list):
@@ -252,7 +252,7 @@ def find_all_issue_links(issues_pages: list):
 I use a wrapping function (`request_and_find_and_save_issue_links()`) for collecting the issue links to avoid polluting `main()`. It uses the functions from above and saves the list of URLs to a `pickle` - a way for Python to persist objects to disk - called `issue_links.p`.
 
 ```python
-def request_and_find_and_save_issue_links():
+def request_and_find_and_save_issue_links(pickle_url: str):
     """Request, find, and save list of issue link url strings as a pickle"""
     print(f"Getting all issue list pages")
 
@@ -262,12 +262,22 @@ def request_and_find_and_save_issue_links():
 
     print(f"Dumping {len(issue_links)} links to pickle issue_links")
 
-    with open('issue_links.p', 'wb') as file_pointer:
+    with open(pickle_url, 'wb') as file_pointer:
         pickle.dump(issue_links, file_pointer)
 ```
 
+### Loading from pickle files
+Since we're saving pickle files, let's make a function for loading them:
+
+```python
+def load_from_pickle(url: str):
+    """Return an object loaded from a local pickle file"""
+    with open(url, 'rb') as file_pointer:
+        return pickle.load(file_pointer)
+```
+
 ## Collecting links to all stories in the magazine
-Each [issue has its own page](TODO: Link to an issue page) with links to every story in that issue. From inspecting the HTML, I can see that the fictional stories are always marked as `Science Fiction` or `Fantasy`. We need to collect every story link marked as `Science Fiction` or `Fantasy` from every issue.
+Each [issue has its own page](http://www.lightspeedmagazine.com/issues/feb-2020-issue-117/) with links to every story in that issue. From inspecting the HTML, I can see that the fictional stories are always marked as `Science Fiction` or `Fantasy`. We need to collect every story link marked as `Science Fiction` or `Fantasy` from every issue.
 
 Each issue is divided into `posts` where each `post` is in a separate `div` with class `post_wrapper`. Each post has an `h2` with the link to the story and an `h3` with category information. If the category is `Science Fiction` or `Fantasy` we save it to a list.
 
@@ -275,7 +285,7 @@ A function for using `Beautiful Soup` to find all of the story links on an issue
 
 ```python
 def find_all_story_links_from_issue(issue: object):
-    """Return a list of all story url strings in an issue"""
+    """Return a list of all story url strings in an issue (BeautifulSoup object)"""
     print(f"Getting all story links from issue")
 
     post_wrapper_divs = issue.body \
@@ -308,11 +318,13 @@ def find_all_story_links_from_issue(issue: object):
 ```
 ### Wrapping function for collecting all story links
 
-We use another wrapper function to avoid polluting main. This function takes a list of issue links and the path to a pickle file of story links (if this file exists). For each issue:
+We use another wrapper function to avoid polluting main. This function takes a list of issue links and the path to a pickle file of story links (if this file exists).
+
+For each issue:
 - if a list of story links already exists, load it from the pickle
-- requests the issue page for the current issue as HTML
-- finds a link to every story in that issue
-- append these story links to the existing list of stories
+- request the issue page for the current issue as HTML
+- find a link to every story in that issue
+- append these story links to the existing list of story links
 - save the updated list of story links as a pickle
 
 The pickle file helps preserve state between processing each issue, so that if an error is encountered we don't have to request every issue again.
@@ -345,7 +357,7 @@ def request_and_find_and_save_story_links_from_issues(issue_links: list, pickle_
 Now we have links for every story in the magazine.
 
 ## Collecting stories from each story page
-We can save each story as a `dictionary` of story attributes. For each story, I want to know:
+Each story [has its own page](http://www.lightspeedmagazine.com/fiction/story-kit/) with the following information that we can store in a `dictionary`:
 - Author
 - Title
 - Issue (the issue containing this story)
@@ -354,7 +366,7 @@ We can save each story as a `dictionary` of story attributes. For each story, I 
 - Type of story (as a sanity check, they should all be of type `Fiction`)
 - Content (the body of the story)
 
-The story content is spread over many HTML elements that need to be processed differently. We will build a string for the story:
+The story content is spread over many HTML elements that need to be processed differently. We will build a string for the story starting with an empty string:
 - `p` elements are converted to text and added to the string
 - `ol` and `ul` are converted to text and added to the string
 - `img` are ignored
@@ -461,7 +473,7 @@ def request_and_find_and_save_stories_from_story_links(story_links: list, pickle
       , "title": "story title"
       , "story_url": "magazine.com/story1234"
       , "issue": "story issue name"
-      , "issue_url": 'magazine.com/issue1234'
+      , "issue_url": "magazine.com/issue1234"
       , "word_count": "1234"
       , "type": "Fiction"
       , "content": "body of story"
@@ -510,19 +522,16 @@ def request_and_find_and_save_stories_from_story_links(story_links: list, pickle
                 pickle.dump(failed_story_urls, file_pointer)
 ```
 
-Now all stories from the magazine are saved in a local `pickle` file!
+Now all stories from the magazine are saved in a local `pickle` file.
 
-## Loading pickle files and main()
-Before we can put our functions together we need to load pickle files. A simple function for doing that:
+## Running from the command line using main()
 
-```python
-def load_from_pickle(url: str):
-    """Return an object loaded from a local pickle file"""
-    with open(url, 'rb') as file_pointer:
-        return pickle.load(file_pointer)
+If `app.py` is run using `python3 app.py` we want the `main()` function to be executed. Running a `.py` file with `python3` sets the `__name__` attribute to `__main__` by default. So check if `__name__` is `__main__`:
+
 ```
-
-If `app.py` is run using `python3 app.py` we want the `main()` function to executed. Running a `.py` file with `python3` sets the `__name__` attribute to `__main__` by default.
+if __name__ == '__main__':
+    main()
+```
 
 The `main()` function will get and save issue links as a pickle, get and save story links as a pickle, and get and save stories as a pickle:
 
@@ -533,7 +542,7 @@ def main():
 
     Only need to run each once to save data to pickle files.
 
-    Three pickle files are saved:
+    Three pickle files are saved (with the suggested names):
     issue_links.p is a list of url strings for all magazine issues
     story_links.p is a list of url strings for all stories in the magazine
     stories.p is an object containing story content and metadata for all stories
@@ -555,6 +564,10 @@ if __name__ == '__main__':
     main()
 ```
 
-That's it! Run `python3 app.py` and after some time we'll have all of the magazine's stories available as a pickle file `stories.p`.
+That's it! Run `python3 app.py` and after some time we'll have `869` of the magazine's stories available as a pickle file `stories.p`.
 
-This process can be extended to other speculative fiction magazines that have content available online for free. In the future we'll use these stories to answer some interesting questions about speculative fiction and authors of speculative fiction.
+A few stories have a different HTML structure and throw errors when processed - we'll have to manually account for those in our code later.
+
+To update the data in the future, remove `issue_links.p` and `story_links.p` (or move them to old_pickles directory) and run the script again. You don't need to remove `stories.p` since the Python script only saves new stories.
+
+This process can be extended to other speculative fiction magazines that have content available online for free. In the future we'll use these stories to answer some interesting questions about speculative fiction.
