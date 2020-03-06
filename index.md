@@ -9,9 +9,6 @@ Cozy computer (CC) whispers squeaky
 Look upon my works ye mighty, and drink tea
 ```
 
-## My works
-[a 404 work](work.md)
-
 ## Blog
 {% for post in site.posts %}
   {% assign read_time =
