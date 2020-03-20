@@ -3,7 +3,7 @@ layout: post
 title:  "Run Bash scripts on startup using systemd on Ubuntu"
 date:   2020-03-19
 ---
-#### Motivation
+### Motivation
 I use a [tiling window manager called i3](https://i3wm.org/) which mostly does away with Ubuntu's default configurations.
 
 One side-effect of my `i3` setup is that on startup the screen resolution is always set to its native resolution which makes text way too small.
@@ -14,6 +14,7 @@ I read that you can fix this using an `~/.xsessionrc` file - but this file can a
 
 Instead I decided to fix the screen resolution by automatically running a `Bash` program on startup using `systemd`.
 
+### Background on systemd
 #### systemd and the init process
 `systemd` is a process manager for Linux. It's in charge of running `units` which are abstractions for various startup and maintenance tasks. Manual files for `systemd` can be found using `man systemd`.
 
@@ -141,16 +142,168 @@ Deeper nodes in the tree generally represent programs that are run earlier in th
 All of the systemctl commands are for `system` units by default. But there are also `user` units which belong to their own unit tree. To view information for `user` units you can run most `systemctl` commands with the `--user` flag.
 
 #### systemd unit files
-Units are described in configuration files. See the documentation for unit files using `man systemd.unit`.
+Units are described in configuration files named following the convention `unitName.unitType`. So in `graphical.target`, the unit named `graphical` has unit type `target`.
 
-From the manual, system unit files are located in the following directories:
+From the manual (`man systemd.unit`), system unit files are located in the following directories:
 
 ![image of directories where system unit files are located](assets/removing-weirdly-named-files-using-inodes-on-ubuntu-0.png)
 
 User unit files are located in these directories:
 
-![image of direcotires where user unit files are located](assets/removing-weirdly-named-files-using-inodes-on-ubuntu-0.png)
+![image of directories where user unit files are located](assets/removing-weirdly-named-files-using-inodes-on-ubuntu-0.png)
 
-Either way, you are free to save your unit files wherever you would like, as long as they are `symbolic linked` back into one of the directories where systemd looks for unit files.
+For both `system` and `user` unit files, you are free to save them anywhere, as long as they are `symbolic linked` back into one of the directories above where systemd looks for unit files.
 
-You can open unit files directly or have `systemctl` print them.
+You can open unit files directly or have `systemctl` print them using `systemctl cat unitName`. Here's the contents of `graphical.target` (notice the first line describes where the unit file is located, and that it's one of the directories where system unit files are supposed to be located):
+
+```
+# /lib/systemd/system/graphical.target
+#  SPDX-License-Identifier: LGPL-2.1+
+#
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+
+[Unit]
+Description=Graphical Interface
+Documentation=man:systemd.special(7)
+Requires=multi-user.target
+Wants=display-manager.service
+Conflicts=rescue.service rescue.target
+After=multi-user.target rescue.service rescue.target display-manager.service
+AllowIsolate=yes
+```
+
+Unit files are groups of `key=value` pairs broken up into sections. Typical sections include:
+- `[Unit]` for describing generic information about the unit including its dependencies
+- `[Install]` for describing how to set up the unit when it is enabled using `systemctl enable unitName`
+- A section specific to the type of unit. For instance, `[Service]` for `.service` files, `[Timer]` for `.timer` files, `[Socket]` for `.socket` files, etc.
+
+Note that `target` unit files do not have a special `[Target]` section because `target` units are only intended to group other units or act as milestones for system states.
+
+### Building and installing a systemd unit for fixing screen resolution
+Recall that I'd like to run a bash script during startup that fixes my screen resolution.
+
+The `service` unit type - for controlling daemons and processes - seems appropriate for this.
+
+Learn more about `service` unit types from the manual (`man systemd.service`):
+
+I decide that this service can be a `user` unit rather than a `system` unit because I want the unit to run when I log in rather than when the system boots.
+
+I decide to save my unit in `~/.config/systemd/user/` after examining the list of directories where systemd looks for user units (see above).
+
+#### fixresolution.sh
+The bash script for setting my screen resolution:
+
+```bash
+#! /usr/bin/env bash
+set -Ceuo pipefail
+xrandr --output eDP1 --mode 1920x1080
+```
+
+The line `set -Ceuo pipefail` is just for handling errors.
+
+The script uses `xrandr` - a command-line interface for setting screen size, orientation, and resolution - to set my screen resolution.
+
+Running `xrandr` on its own will show you what screens your system recognizes, their current and available resolutions, and whether they are connected or not. Each screen is named something like `eDP1, DP1, HDMI1, HDMI2`, etc.
+
+Replace the `--output eDP1` with the name of your monitor and `--mode 1920x1080` with your desired resolution.
+
+Save `fixresolution.sh` somewhere in your home directory and make it executable with `chmod u+x fixresolution.sh`.
+
+Test the script by changing your resolution to something non-ideal like `xrandr --output yourMonitorName --mode 1024x768` and then running `. fixresolution.sh` to set it back to the desired resolution.
+
+#### fixresolution.service
+We'll build a `service` unit to run `fixresolution.sh` on startup.
+
+Paste the following into `~/.config/systemd/user/fixresolution.service`, updating `ExecStart=` to the path where you saved `fixresolution.sh`:
+
+```bash
+[Unit]
+Description=Fix startup screen resolution
+After=default.target
+
+[Service]
+Type=idle
+RemainAfterExit=yes
+ExecStart=/home/patrick/recurse/bash-scripts/systemd-fix-resolution/fixresolution.sh
+
+[Install]
+WantedBy=default.target
+```
+
+Running `systemctl --user get-default` shows that the final target system state for user units is `default.target` - we'll run our script after that target is reached. Hopefully most startup tasks have been completed by then and won't overwrite our resolution settings again.
+
+All units can have a `[Unit]` section for generic unit settings.
+
+Available settings for `[Unit]` are available in `man systemd.unit`. The ones I use:
+- `Description=Fix startup screen resolution` is a short description of the unit for UI and logs to display
+- `After=default.target` will run this unit after the unit `default.target` is reached.
+
+Services need to know what program to run. This is defined with `ExecStart=path/to/your/program`.
+
+Services can have `types`, a few types are:
+- `simple` services expect to run one process (`systemctl` will assume that process is a daemon and keep track of it)
+- `forking` services expect that a child process is created (`systemctl` will assume the child process is a daemon and keep track of it)
+- `oneshot` services expect the process to run once and then close (`systemctl` assumes no daemons are created but still tracks the process)
+- `idle` services are like `simple` but until all active processes are complete (up to 5 seconds)
+
+I chose the `idle` type because the script should try to run after everything else so that nothing else overwrites my screen resolution.
+
+Service `unit files` have a `[Service]` section with service related settings:
+- `Type=idle` sets type to `idle`
+- `RemainAfterExit=yes` marks my service as `active` even after the script has finished running. We can use `systemctl` to examine the process even after it has finished running.
+- `ExecStart=/home/patrick/recurse/bash-scripts/systemd-fix-resolution/fixresolution.sh` has the path to my bash script
+
+All units may have an `[Install]` section for setting up the unit using `systemctl enable`. This section tells where the unit will be placed in the `unit` tree:
+- `WantedBy=default.target` means that this service will start when `default.target` is started (it will be made a direct child of `default.target`).
+
+#### Unit dependencies
+Units can be made to depend upon one another in complex ways.
+
+Some common ways to state dependencies and run orders for our unit (the unit we are writing the configuration file for). These all go in the `[Unit]` section:
+- `Before=someUnit` finishes running our unit before running `someUnit`
+- `After=someUnit` runs our unit after finishing running `someUnit`
+- `Wants=someUnit` runs `someUnit` when our unit is run (they can be run at the same time)
+- `Requires=someUnit` runs our unit only if `someUnit` can be sucessfully started
+
+#### Running fixresolution.service
+Our service is now saved at `~/.config/systemd/user/fixresolution.service` but systemd needs to rescan the directories where it looks for unit files.
+
+Run `systemctl --user daemon-reload` to scan for new unit files.
+
+Confirm that `systemctl` found the new service using `systemctl --user status fixresolution`;
+
+![image of status for fixresolution](assets/removing-weirdly-named-files-using-inodes-on-ubuntu-0.png)
+
+Change your screen resolution again using `xrandr --output yourMonitorName --mode 1024x768` and run `systemctl --user start fixresolution`.
+
+If the service runs successfully your resolution should be reset to your ideal resolution.
+
+#### systemctl enable
+Units can be set to run automatically on startup using `systemctl enable unitName`.
+
+`systemctl enable` does two things:
+- it creates directories with names that describe our dependencies by reading from the `[Install]` section
+- it places a `symbolic link` representing our service inside those directories
+
+This directory structure locates our `unit` in the unit tree that systemd uses to determine run order on startup.
+
+Running `systemctl --user enable fixresolution` will create a directory describing the dependency for `fixresolution`:
+
+```
+Created symlink /home/patrick/.config/systemd/user/default.target.wants/fixresolution.service → /home/patrick/.config/systemd/user/fixresolution.service
+```
+
+The `default.target.wants` directory means that our service will be run when `default.target` is started.
+
+We can see that `fixresolution` is successfully placed in the unit tree by running `systemctl --user list-dependencies default.target`:
+
+![image showing fixresolution as a child unit of default.target](assets/removing-weirdly-named-files-using-inodes-on-ubuntu-0.png)
+
+The service should now run on startup (except that it's not right yet!).
+
+#### Testing the fixresolution service on startup
