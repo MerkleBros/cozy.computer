@@ -2,6 +2,7 @@
 layout: post
 title:  "Vim keybindings in the terminal"
 date:   2020-02-25
+draft: true
 ---
 
 You can navigate the Bash command line using simplified `vi` or `emacs` keybindings.

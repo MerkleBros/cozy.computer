@@ -2,6 +2,7 @@
 layout: post
 title:  "Bash autocompletion and removing weirdly named files using inodes on Ubuntu"
 date:   2020-03-12
+draft: true
 ---
 Recently I was updating my resume and downloaded a `pdf` file named `Resume` several times.
 

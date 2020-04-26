@@ -2,6 +2,7 @@
 layout: post
 Title: "Manual pages and using Vim as the manual pager on Ubuntu Linux"
 Date: 2020-02-24
+draft: true
 ---
 
 The default system pager for viewing manual pages in Ubuntu has keybindings that are difficult for me to remember. Since I work in Vim I wanted to open manual pages using Vim instead.

@@ -2,6 +2,7 @@
 layout: post
 title:  "Run Bash scripts on startup using systemd on Ubuntu"
 date:   2020-03-19
+draft: true
 ---
 ## Motivation
 I use a [tiling window manager called i3](https://i3wm.org/) which mostly does away with Ubuntu's default configurations.

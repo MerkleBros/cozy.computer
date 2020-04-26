@@ -2,6 +2,7 @@
 layout: post
 Title: "Curling Byte Magazine covers and converting PDF pages to PNG"
 Date: 2020-02-19
+draft: true
 ---
 I've recently become inspired by [Byte Magazine's](https://en.wikipedia.org/wiki/Byte_(magazine)) beautiful cover art illustrations.
 

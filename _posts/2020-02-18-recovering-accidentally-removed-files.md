@@ -2,6 +2,7 @@
 layout: post
 Title: "Recovering accidentally removed files"
 Date: 2020-02-18
+draft: true
 ---
 ## Notes on recovering accidentally removed files on Ubuntu 18.04
 Have you ever run `rm` and immediately come to regret your decision? Me too!

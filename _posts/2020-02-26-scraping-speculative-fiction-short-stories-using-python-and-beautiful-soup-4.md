@@ -2,6 +2,7 @@
 layout: post
 Title: "Scraping speculative fiction short stories using Python and Beautiful Soup 4"
 Date: 2020-02-26
+draft: true
 ---
 ## Speculative fiction deep dive
 [Speculative fiction](https://en.wikipedia.org/wiki/Speculative_fiction) is an umbrella genre of fiction covering science fiction, fantasy, horror, dystopian, [weird](https://en.wikipedia.org/wiki/Weird_fiction), and other types of fiction.
