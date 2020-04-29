@@ -1,10 +1,9 @@
 ---
 layout: post
-Title: "Recovering accidentally removed files"
+Title: "Recovering accidentally removed files on Ubuntu"
 Date: 2020-02-18
-draft: true
 ---
-## Notes on recovering accidentally removed files on Ubuntu 18.04
+## Notes on recovering parts of accidentally removed files on Ubuntu 18.04
 Have you ever run `rm` and immediately come to regret your decision? Me too!
 
 Recently I was trying to remove a group of directories full of downloaded images using `rm -r *` only to realize that it also removed a Bash script I'd used to download those images! Although it was only thirteen lines of Bash, I was curious if I could recover all or part of this file.
