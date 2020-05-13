@@ -4,7 +4,7 @@ title:  "Generic debounce in Bash"
 date:   2020-05-11
 draft: true
 ---
-TLDR: A [short Bash script](https://github.com/MerkleBros/debounce.sh/blob/master/debounce.sh) for debouncing using a while loop and processes management
+TLDR: A [short Bash script (Github link)](https://github.com/MerkleBros/debounce.sh) for debouncing using a while loop and processes management.
 
 ![gif of script running on command line](assets/generic-debouncing-in-bash.gif)
 
@@ -28,7 +28,7 @@ The event generating program is `people boarding the elevator`. The action to be
 
 The script `debounce.sh` is given below.
 
-It runs a passed in program repeatedly and, every time that program exits successfully, launches a child process that will run a passed in action after some amount of time has passed. If the program exits successfully again before that time has passed, the child process is replaced by a new child process. When the given program stops exiting successfully for long enough, the surviving child process will finally execute its action.
+It runs a passed in program repeatedly. Every time that program exits successfully it launches a child process that will run a passed in action after some amount of time has passed. If the program exits successfully again before that time has passed, the child process is replaced by a new child process. When the given program stops exiting successfully for long enough, the surviving child process will finally execute its action.
 
 ```
 #! /usr/bin/env bash
@@ -66,7 +66,7 @@ debounce
 ### Positional arguments
 It takes three `positional arguments` - arguments that you pass into the script via the command line:
 
-1. `DEBOUNCE_PROGRAM`: a program that you want to run continuously but that periodically returns successfully when an event occurs (ex a file watcher like inotifywait that returns successfully when a file is changed).
+1. `DEBOUNCE_PROGRAM`: a program that you want to run continuously but that periodically returns successfully when an event occurs (ex a file watcher like `inotifywait` that returns successfully when a file is changed).
 2. `DEBOUNCE_INTERVAL_SECONDS`: a time interval in seconds to wait when the debounce program returns successfully
 3. `DEBOUNCE_ACTION`: a program that runs when the `DEBOUNCE_PROGRAM` has not returned successfully for `DEBOUNCE_INTERVAL_SECONDS` seconds.
 
@@ -79,7 +79,7 @@ The `debounce_action` function just sleeps (does nothing) for `DEBOUNCE_INTERVAL
 
 The `debounce` function runs a `while` loop. Bash while loops - and Bash conditionals in general like `if` statements - run a process and evaluate that process's as `truthy` if that process returns `0`. Our while loop repeatedly runs the passed in program `DEBOUNCE_PROGRAM` until it returns a non-zero number.
 
-Each time `DEBOUNCE_PROGRAM` is run and returns `0`, the `do` loop is executed. It checks whether we've launched a child process yet - kills that child process if it exists - and then launches a new child process by running the `debounce_action` function in the background with `debounce_action &`. The child process's `pid` - process ID - is saved as `debounce_action_pid` so that we can replace it later if the `DEBOUNCE_PROGRAM` returns `0` again before the child process finishes.
+Each time `DEBOUNCE_PROGRAM` is run and returns `0`, the `do` loop is executed. It checks whether we've launched a child process yet - kills that child process if it exists - and then launches a new child process by running the `debounce_action` function in the background with `debounce_action &`. The child process's `pid` - process ID - is saved as `debounce_action_pid` so that we can replace it later if the `DEBOUNCE_PROGRAM` triggers again before the `debounce_action` has fired.
 
 ### Usage
 Pass the three parameters in order to debounce.sh (`DEBOUNCE_PROGRAM`, `DEBOUNCE_INTERVAL_SECONDS`, `DEBOUNCE_ACTION`).
