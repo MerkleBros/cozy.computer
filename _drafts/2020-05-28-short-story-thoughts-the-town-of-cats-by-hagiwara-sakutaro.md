@@ -103,10 +103,10 @@ The main character begins seeking out `jamais vu` experiences because he believe
 ##### Fun trope: Curiosity killed the cat
 A common trope in `weird fiction` is character obsession with seeking out arcane knowledge or attempting to experience things that they probably shouldn't. Usually this obsession leads to a __bad thing__ happening.
 
-##### Fun technique: Obscure your location names
+##### Fun technique: Obscure your names
 > One day, I got off the train midway, and I began walking toward U.
 
-A technique sometimes used in horror writing is to obscure the names of relevant people or places in a story. It's as if the narrator needs to protect you by keeping it secret! Usually this is done by referring to the place by first letter only. Here the names of towns are given as "the town of U". Sometimes a name will be followed with some underscores, like "the town of T___", or referred to with an acronym instead.
+A technique sometimes used in horror writing is to obscure the names of relevant people or places in a story. It's as if the narrator needs to protect you by keeping it secret! Usually this is done by referring to the place by first letter only. Here the names of towns are given as "the town of U". Sometimes a name will be followed with some underscores, like "the town of T___", or referred to with an acronym instead. (I wish I remembered what this technique was called, I think it is maybe named after a famous author).
 
 #### Plot details: the section with spoilers
 The plot is divided into three episodes (conveniently marked with scene breaks `I, II, III`).
