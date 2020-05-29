@@ -130,3 +130,6 @@ I liked the imagery of the spinning compass.
 > When I was a boy a long time ago, and I used to examine a framed picture that hung on the walls of the house. I wondered all the while what worlds lay hidden on the reverse side of the framed landscape. I removed the frame repeatedly to peep at the back side of the painting. Those childhood thoughts have now turned into a riddle that remains impossible for me to solve even as an adult.
 
 And the image of the boy inspecting the backs of picture frames.
+
+##### Misc
+[More on The Town of Cats at Tor.com including a lovely poem at the bottom](https://www.tor.com/2018/10/10/ulthar-in-the-fourth-dimension-hagiwara-sakutaros-the-town-of-cats/)
