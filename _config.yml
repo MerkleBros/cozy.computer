@@ -9,5 +9,7 @@ url: "https://cozy.computer"
 twitter_username: cozy_computer
 github_username: Merklebros
 permalink: /:title
+collections:
+  - journal_entries
 plugins:
   - jekyll-feed
