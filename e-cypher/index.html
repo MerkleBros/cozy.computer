@@ -1,0 +1,24 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>E cypher</title>
+  <meta name="description" content="Translate between English and e-cypher">
+  <meta name="author" content="Patrick McCarver">
+</head>
+
+<body>
+  <form id="encypher-form">
+    <textarea id="encypher-text-area" cols="80" rows="5" form="encypher-form" placeholder="Enter text to be e-cyphered"></textarea>
+    <input type="submit" value="English to e-cypher">
+  </form>
+  <form id="decypher-form" onsubmit="return false">
+    <textarea id="decypher-text-area" cols="80" rows="10" form="decypher-form" placeholder="Enter text to be de-e-cyphered"></textarea>
+    <input type="submit" value="e-cypher to English">
+  </form>
+  <script type="module" src="ecypher.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
