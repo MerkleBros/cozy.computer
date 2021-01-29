@@ -1,0 +1,126 @@
+html {
+  width: 100vw;
+}
+body {
+  background: #24aecd;
+  padding: 1vw;
+  height: 90vh;
+  width: 100vw;
+  caret-color: transparent;
+  animation: bgrandom 20s steps(20) alternate infinite;
+}
+@keyframes bg-fade {
+  100% {
+    background: black;
+    color: white;
+    opacity: 1;
+    filter: brightness(1200%);
+  }
+}
+.message-div {
+  width: 80vw;
+  height: 10vh;
+  min-width: 80vw;
+  min-height: 10vh;
+  text-align: center;
+  padding: 4vw;
+  margin: 4vh;
+  border: 5px solid rgba(201,0,76,0.7);
+  background-color: rgba(255, 220, 100, 0.3);
+  color: white;
+  font-size: 3em;
+  opacity: 0.6;
+}
+.monster-container, .dog-container {
+  opacity: 0.7;
+}
+
+.monster {
+  width: 30px;
+  height: 30px;
+  margin: 5% auto;
+  background: url('./cropped-idle.png') left center;
+  animation: bounce 1s steps(4) infinite;
+  transform: scale(400%);
+}
+
+@keyframes bounce {
+  0% {
+    background-position: 0px 30px;
+  }
+  100% {
+    background-position: 0px -115px;
+  }
+}
+.monster-container {
+  width: 40vw;
+  height: 1em;
+  padding: 1em;
+  animation: run 6s;
+  animation-fill-mode: forwards;
+}
+@keyframes run {
+  0% {
+    translate: -100%;
+  }
+  100% {
+    translate: 40%;
+  }
+}
+.dog {
+  width: 32px;
+  height: 32px;
+  margin: 5% auto;
+  background: url('./dog-sprite.png') left center;
+  animation: blink 7s steps(2) infinite;
+  background-position: 0px 0px;
+  transform: scale(400%);
+}
+
+.dog-container {
+  width: 40vw;
+  height: 1em;
+  padding: 1em;
+  animation: dog-run 7s;
+  animation-fill-mode: forwards;
+}
+@keyframes blink {
+  0% {
+    background-position: 0px 32px;
+  }
+  100% {
+    background-position: 0px 96px;
+  }
+  0% {
+    background-position: 0px 32px;
+  }
+}
+@keyframes dog-run {
+  0% {
+    translate: 400%;
+  }
+  100% {
+    translate: 80%;
+  }
+}
+@keyframes bgrandom {
+  0% {
+    background-color: #24aecd;
+  }
+  100% {
+    background-color: #ba66e0;
+  }
+}
+#message {
+  overflow: hidden;
+  margin: 0 auto;
+  letter-spacing: .10em;
+  font-size: 2vw;
+}
+.playing-5s {
+  animation: play 5s steps(1, end)
+}
+.playing-7s {
+  animation: play 7s steps(1, end)
+}
+@keyframes play {}
